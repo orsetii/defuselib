@@ -1,4 +1,6 @@
-# counteranalysis
+# defuse
+
+CS:GO Demo Analyzer written in Go.
 
 
 

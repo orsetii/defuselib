@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -11,23 +12,23 @@ func demOpen(path string) (f *os.File, err error) {
 	return f, nil
 }
 
-func validatePaths(files []string) {
-	var errFiles []string
+func validatePaths(files []string) (FoundFiles []string, err error) {
+	printInfo("Validating Files...\n")
+	errdFiles := 0
 	for _, v := range files {
 		if _, err := os.Stat(v); os.IsNotExist(err) {
-			errFiles = append(errFiles, v)
+
+			printWarn(fmt.Sprintf("\n\tError finding a file located at %s.", v))
+			errdFiles++
+		} else {
+			FoundFiles = append(FoundFiles, v)
 		}
 	}
-	errFilelen := len(errFiles)
-	if errFilelen > 0 {
-		for _, v := range files {
-			fmt.Printf("Error finding a file located at %s.\n", v)
-		}
-		fmt.Printf("Failed to Locate %d of your %d requested files.\n Would you still like to continue? (y/N)", errFilelen, len(files))
-		var resp rune
-		fmt.Scanf("%c", &resp)
-		if resp != 'y' {
-			os.Exit(1)
-		}
+	printQuestion(fmt.Sprintf("\n\nFailed to Locate %d of your %d requested files.\n Would you still like to continue? (y/N)", errdFiles, len(files)))
+	var resp string
+	fmt.Scanf("%s\n", &resp)
+	if resp == "y" {
+		return FoundFiles, nil
 	}
+	return nil, errors.New("User Requested Exit")
 }
