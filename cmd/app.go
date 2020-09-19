@@ -7,13 +7,13 @@ import (
 	"github.com/fatih/color"
 )
 
-func Start(filePaths []string) {
+func Main(filePaths []string) {
 	// Receive slice of strings to filepaths
 	ValidPaths, err := validatePaths(filePaths)
 	if err != nil {
 		os.Exit(1)
 	}
-	fmt.Println(ValidPaths)
+	fmt.Println(ValidPaths) //TODO this is here for preventing var not used err
 }
 
 func printWarn(content string) {

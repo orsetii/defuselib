@@ -1,20 +1,26 @@
 package main
 
 import (
-	"flag"
 	"strings"
 
 	"github.com/orsetii/defuse/cmd"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
-	fileList string
+	// Flags
+	FileList     = kingpin.Flag("demos", "List of Demo Files to parse").Short('d').Required().String()
+	OpenFileList = kingpin.Flag("demo-list", "Filepath of a list of demo files.").String()
+	BUFSIZE      = kingpin.Flag("buf", "Size of buffer used when reading demo files.").Short('b').Int()
+	Verbose      = kingpin.Flag("verbose", "Enable verbose mode").Short('v').Bool()
 )
 
 func main() {
-	fileListFlag := flag.String("demo", "", "Demo file paths, split by commas.") // Make this a custom flag, with a call to demOpenFromArgs in the Parsing functionality
-	flag.Parse()
-	cmd.Start(demOpenFromArgs(*fileListFlag))
+	// TODO add file reading functionality for OpenFileList
+	// TODO if FileList or OpenFileList not declared, exit.
+	kingpin.Parse()
+	cmd.Main(demOpenFromArgs(*FileList))
+
 }
 
 func demOpenFromArgs(fileList string) []string {
@@ -22,7 +28,6 @@ func demOpenFromArgs(fileList string) []string {
 		fileList = strings.Replace(fileList, " ", "", -1)
 	}
 	if strings.Contains(fileList, ",") {
-
 		return strings.Split(fileList, ",")
 	}
 	return []string{fileList}

@@ -24,10 +24,14 @@ func validatePaths(files []string) (FoundFiles []string, err error) {
 			FoundFiles = append(FoundFiles, v)
 		}
 	}
+	if len(files) == len(FoundFiles) {
+		return FoundFiles, nil
+	}
 	printQuestion(fmt.Sprintf("\n\nFailed to Locate %d of your %d requested files.\n Would you still like to continue? (y/N)", errdFiles, len(files)))
 	var resp string
 	fmt.Scanf("%s\n", &resp)
 	if resp == "y" {
+
 		return FoundFiles, nil
 	}
 	return nil, errors.New("User Requested Exit")
