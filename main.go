@@ -16,8 +16,8 @@ var (
 )
 
 func main() {
-	// TODO add file reading functionality for OpenFileList
-	// TODO if FileList or OpenFileList not declared, exit.
+	// @TODO add file reading functionality for OpenFileList
+	// @TODO if FileList or OpenFileList not declared, exit.
 	kingpin.Parse()
 	cmd.Main(demOpenFromArgs(*FileList))
 
