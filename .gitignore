@@ -4,6 +4,8 @@
 *.dll
 *.so
 *.dylib
+*.jpg
+*.txt
 
 # Test binary, built with `go test -c`
 *.test
@@ -15,3 +17,4 @@
 # vendor/
 demos/
 examples/
+
