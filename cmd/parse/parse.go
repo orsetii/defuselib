@@ -69,11 +69,10 @@ func ParseDemo(f *os.File, verbose bool) (err error) {
 		demoInfo.NadePaths[id].path = e.Projectile.Trajectory
 	})
 
-	fmt.Printf("\n")
 	// @TODO Create custom parsing loop here, print metadata & progress as it goes. remember carriage returns
 	for frame := 0; frame < demoInfo.Header.PlaybackTicks; frame++ {
-		prog := p.Progress() * 100
-		cmd.PrintInfo(fmt.Sprintf("%f%% Done\r", prog))
+		prog := p.Progress() * 75
+		cmd.PrintProg(int(prog)) // @TODO add channel here to signal processing or something?
 		cont, err := p.ParseNextFrame()
 		if !cont {
 			break
@@ -83,20 +82,12 @@ func ParseDemo(f *os.File, verbose bool) (err error) {
 		}
 	}
 
-	// // Parse demo to its end.
-	// // Check for errors and ret if any found.
-	// err = p.ParseToEnd()
-	// if err != nil {
-	// 	return err
-	// }
 	// We have to assign some data here as not possible to get pre-parsing.
 	demoInfo.Teams[0].ClanName = p.GameState().TeamCounterTerrorists().ClanName()
 	demoInfo.Teams[1].ClanName = p.GameState().TeamTerrorists().ClanName()
 	demoInfo.Teams[0].Players = p.GameState().TeamCounterTerrorists().Members()
 	demoInfo.Teams[1].Players = p.GameState().TeamTerrorists().Members()
-	fmt.Println(demoInfo.Teams[0].Players[0].SteamID64)
 	fmt.Printf("%v", demoInfo.Teams)
-
 	return nil
 
 }
