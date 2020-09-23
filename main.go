@@ -17,17 +17,18 @@ var (
 	app = kingpin.New("defuse", "A CS:GO analyzer to evaluate performance in matches.")
 	// Flags
 	//OpenFileList = kingpin.Flag("demo-list", "Filepath of a list of demo files.").String()
-	demoList = kingpin.Flag("demos", "path of demos to analyze").Short('d').Required().String()
-	BUFSIZE  = kingpin.Flag("buf", "Size of buffer used when reading demo files.").Short('b').Int()
-	Verbose  = kingpin.Flag("verbose", "Enable verbose mode").Short('v').Bool()
+	demoList    = app.Flag("demos", "path of demos to analyze").Short('d').Required().String()
+	BUFSIZEFlag = app.Flag("buf", "Size of buffer (MiB) used when reading demo files.").Default("1").Short('b').Int()
+	Verbose     = app.Flag("verbose", "Enable verbose mode").Short('v').Bool()
 
 	// misc
 	wg sync.WaitGroup
 )
 
 func main() {
-
-	kingpin.Parse()
+	kingpin.MustParse(app.Parse(os.Args[1:]))
+	// Get Correct Buffer Size defaulting to 1 MiB.
+	// @TODO Use in buffering opening BUFSIZE := *BUFSIZEFlag * 1048576 // 1MiB = 1048576 bytes.
 
 	// @TODO add file reading functionality for OpenFileList
 	// @TODO if FileList or OpenFileList not declared, exit.
@@ -42,9 +43,10 @@ func main() {
 	// @TODO Look to add concurrency around here?
 	cmd.PrintInfo("Beginning File Parsing...\n")
 	for _, v := range ValidPaths {
-		f, err := os.Open(v)
 		wg.Add(1)
 		go func(path string) {
+			f, err := os.Open(path)
+			defer f.Close()
 			defer wg.Done()
 			if err == nil {
 

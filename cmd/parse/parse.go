@@ -69,10 +69,9 @@ func ParseDemo(f *os.File, verbose bool) (err error) {
 		demoInfo.NadePaths[id].path = e.Projectile.Trajectory
 	})
 
-	// @TODO Create custom parsing loop here, print metadata & progress as it goes. remember carriage returns
 	for frame := 0; frame < demoInfo.Header.PlaybackTicks; frame++ {
 		prog := p.Progress() * 75
-		cmd.PrintProg(int(prog)) // @TODO add channel here to signal processing or something?
+		cmd.PrintProg(int(prog))
 		cont, err := p.ParseNextFrame()
 		if !cont {
 			break
@@ -105,5 +104,4 @@ func NewSerData(p demo.Parser) (demInfo SerData, err error) {
 	demInfo.NadePaths = make(nadeMap, 600)
 
 	return demInfo, nil
-
 }
