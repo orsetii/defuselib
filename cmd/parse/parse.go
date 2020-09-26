@@ -86,7 +86,7 @@ func ParseDemo(f *os.File, verbose bool) (err error) {
 	demoInfo.Teams[1].ClanName = p.GameState().TeamTerrorists().ClanName()
 	demoInfo.Teams[0].Players = p.GameState().TeamCounterTerrorists().Members()
 	demoInfo.Teams[1].Players = p.GameState().TeamTerrorists().Members()
-	fmt.Printf("%v", demoInfo.Teams)
+	fmt.Printf("%+v", demoInfo)
 	return nil
 
 }

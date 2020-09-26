@@ -1,6 +1,7 @@
 # defuse
 
-CS:GO Demo Analyzer written in Go.
+CS:GO Demo Analyzer library written in Go.
+
 
 
 
